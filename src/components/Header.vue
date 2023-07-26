@@ -10,8 +10,9 @@
         </div>
         <div class="links">
           <nav>
-            <RouterLink to="/" active-class="is-active">Home</RouterLink>
-            <RouterLink to="/about" active-class="is-active">About</RouterLink>
+            <RouterLink to="/" active-class="is-active" v-show="taskStore.auth">My Tasks</RouterLink>
+            <RouterLink to="#" v-show="taskStore.auth">Logout</RouterLink>
+            <RouterLink to="/login" active-class="is-active" v-show="!taskStore.auth">Login</RouterLink>
           </nav>
         </div>
       </div>
@@ -23,7 +24,10 @@
   imports
 */
 
-import { RouterLink} from 'vue-router'
+import { RouterLink } from 'vue-router'
+import { useTaskStore } from '@/stores/taskStore.js'
+
+const taskStore = useTaskStore()
 
 </script>
 
@@ -80,10 +84,10 @@ header {
 
 .links a {
   font-family: 'Gloria Hallelujah', cursive;
-  font-size: 20px;
+  font-size: 18px;
   font-weight: 600;
   color: #fff;
-  padding: 24px;
+  padding: 26px;
 }
 
 .is-active {
@@ -92,5 +96,6 @@ header {
 
 a.is-active, .is-active:hover {
     background-color: #bcfbf315;
+    color: #bcfbf3;
   }
 </style>

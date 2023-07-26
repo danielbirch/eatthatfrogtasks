@@ -11,7 +11,7 @@
   imports
 */
 
-import { RouterLink, RouterView } from 'vue-router'
+import { RouterView } from 'vue-router'
 import Header from '@/components/Header.vue'
 import Footer from '@/components/Footer.vue'
 
@@ -35,7 +35,7 @@ body {
   margin: 0 auto;
 }
 
-main.wrapper {
+.wrapper-main {
   width: 100%;
   max-width: 1100px;
   background-color: #f5f5f5;
@@ -46,6 +46,12 @@ main.wrapper {
 
 textarea:focus, input:focus, input[type]:focus, .uneditable-input:focus {
   outline-color: #4b82c0;
+}
+
+@media (max-width: 768px) {
+  .wrapper-main {
+    margin: 0 1em;
+  }
 }
 
 </style>
