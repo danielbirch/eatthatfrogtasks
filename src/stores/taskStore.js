@@ -6,18 +6,18 @@ export const useTaskStore = defineStore('tasks', {
     return {
       auth: ref(true),
       inputText: ref(''),
-      taskInput: ref(null),
+      pc: ref('Normal'),
       tasks: [
         {
           id: 1,
           title: 'task 1',
-          priority: 'High',
+          priority: 'Normal',
           dueDate: '1st January'
         },
         {
           id: 2,
           title: 'task 2',
-          priority: 'High',
+          priority: 'Normal',
           dueDate: '1st January'
         }
       ]
@@ -28,27 +28,25 @@ export const useTaskStore = defineStore('tasks', {
       const taskEntryDate = new Date().getTime().toString()
       return taskEntryDate
     },
-    // dueDate: () => {
-    //   const currentDate = new Date()
-    //   const day = currentDate.getDate()
-    //   const month = currentDate.getMonth() + 1
-    //   console.log(day)
-    //   return day
-    // }
+    priorityClasses: (pc) => {
+      return {
+        High: pc.value === 'High',
+        Normal: pc.value === 'Normal',
+        Low: pc.value === 'Low',
+      }
+    }
   },
   actions: {
     addTask() {
       const newTaskObj = {
         id: this.entryDate,
         title: this.inputText,
-        priority: 'Priority',
+        priority: this.pc,
         dueDate: 'Do Later'
       }
       this.tasks.push(newTaskObj)
       this.inputText = ''
-      if (this.taskInput) {
-        this.taskInput.focus() // Would love to know why this only works when inside an if statement
-      }
+      console.log(this.pc.value)
     }
   },
 })

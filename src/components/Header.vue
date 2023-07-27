@@ -33,9 +33,14 @@ const taskStore = useTaskStore()
 
 <style>
 header {
-  width: 100%;
+  width: 90%;
   display: flex;
-  background-color:	#36726b;
+  position: sticky;
+  top: 1em;
+  margin: 0 auto 4em auto;
+  background-color: #36726b;
+  border-radius: 20px;
+  z-index: 99;
 }
 
 .logo-text {

@@ -6,7 +6,6 @@
       </div>
       <div class="footer-right">
         <a href="#">Privacy</a>
-        <a href="#">Sitemap</a>
       </div>
     </div>
   </footer>
@@ -23,6 +22,9 @@ const currentYear = new Date().getFullYear()
 </script>
 
 <style scoped>
+footer {
+  margin-bottom: 3em;
+}
 .wrapper {
   display: flex;
   justify-content: space-between;

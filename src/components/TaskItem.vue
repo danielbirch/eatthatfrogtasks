@@ -1,11 +1,11 @@
 <template>
-      <div
-      ref="taskItem"
-      @mouseenter.self="hover=true"
-      @mouseleave.self="hover=false"
-      class="task-item"
-      :class="{'floated': hover, 'unfloated': hover === false}"
-      >
+    <div
+    ref="taskItem"
+    @mouseenter.self="hover=true"
+    @mouseleave.self="hover=false"
+    class="task-item"
+    :class="{'floated': hover, 'unfloated': hover === false}"
+    >
       <div class="task-text">{{ task.title }}</div>
       <div class="task-priority">{{ task.priority }}</div>
       <div class="task-due-date">{{ task.dueDate }}</div>
@@ -16,14 +16,8 @@
 /*
   imports
 */
+
 import { ref, defineProps } from 'vue'
-import { useTaskStore } from '@/stores/taskStore.js'
-
-/*
-  store
-*/
-
-const taskStore = useTaskStore()
 
 /*
   props

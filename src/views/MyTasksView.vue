@@ -8,11 +8,18 @@
         name="new-entry-input"
         @keydown.enter="taskStore.addTask"
         v-model="taskStore.inputText"
-        :ref="taskStore.taskInput"
+        ref="taskInput"
+        autofocus
       />
-      <PrioritySelect />
+      <PrioritySelect class="select-priority" @change="focusAfterPriority"/>
       <div class="select-date">
-        <VueDatePicker v-model="date" time-picker-inline :is-24="false" :format="format"></VueDatePicker>
+        <VueDatePicker
+          v-model="date"
+          time-picker-inline
+          :is-24="false"
+          :enable-time-picker="false"
+          :format="format"></VueDatePicker
+        >
       </div>
     </div>
   </div>
@@ -22,21 +29,16 @@
 </template>
 
 <script setup>
-
-import { ref } from 'vue';
-import VueDatePicker from '@vuepic/vue-datepicker';
-import '@vuepic/vue-datepicker/dist/main.css'
-
-const date = ref(new Date());
-
 /*
   imports
 */
 
+import { ref } from 'vue';
 import { useTaskStore } from '@/stores/taskStore.js'
 import TaskItem from '@/components/TaskItem.vue'
 import PrioritySelect from '@/components/PrioritySelect.vue'
-
+import VueDatePicker from '@vuepic/vue-datepicker';
+import '@vuepic/vue-datepicker/dist/main.css'
 
 /*
   store
@@ -44,21 +46,69 @@ import PrioritySelect from '@/components/PrioritySelect.vue'
 
 const taskStore = useTaskStore()
 
-
 /*
   date format
 */
 
-const format = (date) => {
-  const day = date.getDate()
-  const month = date.getMonth() + 1
-  const year = date.getFullYear()
-  // const hours = date.getHours()
-  const hours = (date.getHours() + 24) % 12 || 12
-  const minutes = (date.getMinutes() <10?'0':'') + date.getMinutes()
+const date = ref(new Date());
 
-  return `Due on ${day}/${month}/${year} at ${hours}:${minutes}`
+const format = (date) => {
+  const getDaySuffix = (dayOfWeek) => {
+  if (dayOfWeek >= 11 && dayOfWeek <= 13) {
+    return 'th'
+  }
+  const lastDigit = dayOfWeek % 10
+  switch (lastDigit) {
+    case 1: return 'st'
+    case 2: return 'nd'
+    case 3: return 'rd'
+    default: return 'th'
+  }
 }
+  const daysOfWeek = [
+    'Sunday',
+    'Monday',
+    'Tuesday',
+    'Wednesday',
+    'Thursday',
+    'Friday',
+    'Saturday'
+  ]
+  const monthsOfYear = [
+    'January',
+    'February',
+    'March',
+    'April',
+    'May',
+    'June',
+    'July',
+    'August',
+    'September',
+    'October',
+    'November',
+    'December'
+]
+  const day = daysOfWeek[date.getDay()] + ' '
+  const dayOfWeek = date.getDate()
+  const daySuffix = getDaySuffix(dayOfWeek) + ' '
+  const month = monthsOfYear[date.getMonth()]
+  // const year = date.getFullYear()
+  // const hours = (date.getHours() + 24) % 12 || 12
+  // const minutes = (date.getMinutes() <10?'0':'') + date.getMinutes()
+
+  return `Due ${day}${dayOfWeek}${daySuffix}${month}`
+}
+
+/*
+  focus input after priority selection
+*/
+
+const taskInput = ref(null)
+
+function focusAfterPriority() {
+  taskInput.value.focus()
+}
+
 
 </script>
 
@@ -95,21 +145,12 @@ input::placeholder {
   align-items: center;
   justify-content: center;
   flex-grow: 1;
-  height: 100%;
-  text-align: center;
-  font-size: 16px;
-  font-weight: 600;
 }
 
-.select-priority span {
-  background-color: #4b82c0;
-  font-family: 'Arial', sans-serif;
-  color: #fff;
-}
-
-.select-date {
-  font-family: 'Arial', sans-serif;
-  color: #4b82c0;
+.dp__input {
+  height: 60px;
+  border: none;
+  border-radius: 10px;
 }
 
 </style>
