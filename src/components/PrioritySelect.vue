@@ -62,5 +62,4 @@ select#priority {
   background-color: #4b82c0;
 }
 
-
 </style>

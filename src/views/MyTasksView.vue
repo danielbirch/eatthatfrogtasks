@@ -1,16 +1,20 @@
 <template>
   <div class="wrapper-main">
     <div class="container">
-      <input
-        placeholder="Add a new task..."
-        class="task-input"
-        type="text"
-        name="new-entry-input"
-        @keydown.enter="taskStore.addTask"
-        v-model="taskStore.inputText"
-        ref="taskInput"
-        autofocus
-      />
+      <div class="input-wrapper">
+
+        <input
+          placeholder="Add a new task..."
+          class="task-input"
+          type="text"
+          name="new-entry-input"
+          @keydown.enter="taskStore.addTask"
+          v-model="taskStore.inputText"
+          ref="taskInput"
+          autofocus
+        />
+        <span @click.prevent="focusAfterPriority"></span>
+      </div>
       <PrioritySelect class="select-priority" @change="focusAfterPriority"/>
       <div class="select-date">
         <VueDatePicker
@@ -18,8 +22,8 @@
           time-picker-inline
           :is-24="false"
           :enable-time-picker="false"
-          :format="format"></VueDatePicker
-        >
+          :format="format"
+          ></VueDatePicker>
       </div>
     </div>
   </div>
@@ -33,7 +37,7 @@
   imports
 */
 
-import { ref } from 'vue';
+import { onMounted, ref } from 'vue';
 import { useTaskStore } from '@/stores/taskStore.js'
 import TaskItem from '@/components/TaskItem.vue'
 import PrioritySelect from '@/components/PrioritySelect.vue'
@@ -45,6 +49,14 @@ import '@vuepic/vue-datepicker/dist/main.css'
 */
 
 const taskStore = useTaskStore()
+
+/*
+  initial sort on load
+*/
+
+onMounted(() => {
+  taskStore.sortTasks()
+})
 
 /*
   date format
@@ -96,7 +108,8 @@ const format = (date) => {
   // const hours = (date.getHours() + 24) % 12 || 12
   // const minutes = (date.getMinutes() <10?'0':'') + date.getMinutes()
 
-  return `Due ${day}${dayOfWeek}${daySuffix}${month}`
+  taskStore.dateOutput = `Due ${day}${dayOfWeek}${daySuffix}${month}`
+  return taskStore.dateOutput
 }
 
 /*
@@ -109,19 +122,7 @@ function focusAfterPriority() {
   taskInput.value.focus()
 }
 
-/*
-  sorting tasks
-*/
-
-// const sortedTasks = ref([])
-
-// function sortTasks() {
-//   const tempTaskArray = [...taskStore.tasks]
-//   tempTaskArray.sort((a, b) => (a.complete === b.complete ? 0 : a.complete ? 1 : -1))
-//   sortedTasks.value = tempTaskArray
-// }
-
-taskStore.sortTasks()
+// const focusAfterPriority = taskStore.focusAfterPriority
 
 
 </script>
@@ -130,15 +131,42 @@ taskStore.sortTasks()
 .container {
   width: 100%;
   display: flex;
-  flex-direction: row;
+  flex-direction: row-reverse;
   justify-content: center;
   align-items: center;
 }
 
-.task-input {
+.input-wrapper {
+  /* display:inline-block;
+  position: relative */
   display: flex;
   justify-content: flex-start;
   flex-grow: 10;
+}
+
+.input-wrapper span:after {
+  width: 0;
+  height: max-content;
+  font-family: 'Font Awesome 5 Free';
+  content: '\f560';
+  position: relative;
+  right: 35px;
+  top: 12px;
+  font-weight: 600;
+  font-size: 24px;
+  color: #36726b;
+}
+
+.input-wrapper span {
+  width: 0;
+  cursor: pointer;
+}
+
+.task-input {
+  /* display: flex;
+  justify-content: flex-start;
+  flex-grow: 10; */
+  width: 100%;
   border-radius: 10px;
   border: none;
   font-size: 24px;

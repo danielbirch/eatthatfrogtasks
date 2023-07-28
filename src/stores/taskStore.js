@@ -7,7 +7,7 @@ export const useTaskStore = defineStore('tasks', {
       auth: ref(true),
       inputText: ref(''),
       pc: ref('Normal'),
-      date: ref('zz'),
+      dateOutput: ref(''),
       tasks: [
         {
           id: 2,
@@ -48,7 +48,7 @@ export const useTaskStore = defineStore('tasks', {
         Normal: pc.value === 'Normal',
         Low: pc.value === 'Low',
       }
-    }
+    },
   },
   actions: {
     entryDate() {
@@ -65,12 +65,16 @@ export const useTaskStore = defineStore('tasks', {
         id: this.entryDate(),
         title: this.inputText,
         priority: this.pc,
-        dueDate: this.date,
+        dueDate: this.dateOutput,
         complete: false
       }
       this.tasks.push(newTaskObj)
       this.inputText = ''
       this.sortTasks()
+      this.focusAfterPriority()
+    },
+    focusAfterPriority() {
+      this.taskInput?.focus()
     }
   }
 })
