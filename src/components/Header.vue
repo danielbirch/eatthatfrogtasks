@@ -36,7 +36,7 @@ header {
   width: 90%;
   display: flex;
   position: sticky;
-  top: 1em;
+  top: 1.5em;
   margin: 0 auto 4em auto;
   background-color: #36726b;
   border-radius: 20px;

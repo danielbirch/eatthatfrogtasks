@@ -24,7 +24,7 @@
     </div>
   </div>
   <div class="wrapper-main">
-    <TaskItem v-for="task in taskStore.tasks" :key="task.id" :task="task"/>
+    <TaskItem v-for="task in taskStore.sortedTasks" :key="task.id" :task="task"/>
   </div>
 </template>
 
@@ -108,6 +108,20 @@ const taskInput = ref(null)
 function focusAfterPriority() {
   taskInput.value.focus()
 }
+
+/*
+  sorting tasks
+*/
+
+// const sortedTasks = ref([])
+
+// function sortTasks() {
+//   const tempTaskArray = [...taskStore.tasks]
+//   tempTaskArray.sort((a, b) => (a.complete === b.complete ? 0 : a.complete ? 1 : -1))
+//   sortedTasks.value = tempTaskArray
+// }
+
+taskStore.sortTasks()
 
 
 </script>

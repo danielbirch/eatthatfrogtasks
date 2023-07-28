@@ -1,10 +1,11 @@
 <template>
     <div
-    ref="taskItem"
     @mouseenter.self="hover=true"
     @mouseleave.self="hover=false"
     class="task-item"
     :class="{'floated': hover, 'unfloated': hover === false}"
+    ref="taskItem"
+    @click="markComplete(task.id)"
     >
       <div class="task-text">{{ task.title }}</div>
       <div class="task-priority">{{ task.priority }}</div>
@@ -18,6 +19,13 @@
 */
 
 import { ref, defineProps } from 'vue'
+import { useTaskStore } from '@/stores/taskStore.js'
+
+/*
+  store
+*/
+
+const taskStore = useTaskStore()
 
 /*
   props
@@ -31,9 +39,30 @@ const props = defineProps(['task'])
 
 const hover = ref(null)
 
+/*
+  mark task as complete
+*/
+
+const taskItem = ref(null)
+
+const markComplete = (taskId) => {
+  taskItem.value.toggleAttribute('complete')
+
+  const taskToComplete = taskStore.sortedTasks.find((task) => taskId === task.id)
+  if (taskToComplete) {
+    taskToComplete.complete = !taskToComplete.complete
+    taskStore.sortTasks()
+  }
+}
+
+
 </script>
 
 <style>
+[complete] {
+  opacity: 0.3;
+}
+
 .task-item {
   display: flex;
   align-items: center;
@@ -46,6 +75,7 @@ const hover = ref(null)
   border-radius: 10px;
   padding: 0;
   margin-bottom: 0.5em;
+  cursor: pointer;
 }
 
 .task-text {
@@ -75,7 +105,7 @@ const hover = ref(null)
   to {scale: 110%;}
 }
 
-.floated {
+.floated:not([complete]) {
   animation: float;
   animation-duration: 0.3s;
   animation-fill-mode: forwards;
@@ -86,7 +116,7 @@ const hover = ref(null)
   to {scale: 100%;}
 }
 
-.unfloated {
+.unfloated:not([complete]) {
   scale: 100%;
   animation: unfloat;
   animation-duration: 0.4s;

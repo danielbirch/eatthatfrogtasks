@@ -47,6 +47,7 @@ select#priority {
   border-radius: 10px;
   height: 60px;
   outline: none;
+  cursor: pointer;
 }
 
 .High {
