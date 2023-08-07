@@ -36,6 +36,7 @@
     />
     <div v-else class="no-tasks">Nice work! You're all caught up. 🎉</div>
   </div>
+  <EditModal v-if="taskStore.editModal" :date="date" :format="format"/>
 </template>
 
 <script setup>
@@ -49,6 +50,7 @@ import TaskItem from '@/components/TaskItem.vue'
 import PrioritySelect from '@/components/PrioritySelect.vue'
 import VueDatePicker from '@vuepic/vue-datepicker';
 import '@vuepic/vue-datepicker/dist/main.css'
+import EditModal from '../components/EditModal.vue';
 
 /*
   store

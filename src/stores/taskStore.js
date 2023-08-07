@@ -10,7 +10,8 @@ export const useTaskStore = defineStore('tasks', {
       priorityColor: ref(''),
       dateOutput: ref(''),
       tasks: [],
-      sortedTasks: ref([])
+      sortedTasks: ref([]),
+      editModal: ref(false)
     }
   },
   getters: {
@@ -76,6 +77,9 @@ export const useTaskStore = defineStore('tasks', {
         this.tasks = newTasks
         this.sortTasks()
     }
+    },
+    toggleEditModal() {
+      this.editModal = !this.editModal
     }
   }
 })
