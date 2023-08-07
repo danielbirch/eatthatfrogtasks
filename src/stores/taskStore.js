@@ -7,37 +7,9 @@ export const useTaskStore = defineStore('tasks', {
       auth: ref(true),
       inputText: ref(''),
       pc: ref('Normal'),
+      priorityColor: ref(''),
       dateOutput: ref(''),
-      tasks: [
-        {
-          id: 2,
-          title: 'task 2',
-          priority: 'Normal',
-          dueDate: '1st January',
-          complete: false
-        },
-        {
-          id: 1,
-          title: 'task 1',
-          priority: 'Normal',
-          dueDate: '1st January',
-          complete: false
-        },
-        {
-          id: 4,
-          title: 'task 4',
-          priority: 'Normal',
-          dueDate: '1st January',
-          complete: false
-        },
-        {
-          id: 3,
-          title: 'task 3',
-          priority: 'Normal',
-          dueDate: '1st January',
-          complete: false
-        }
-      ],
+      tasks: [],
       sortedTasks: ref([])
     }
   },
@@ -48,7 +20,7 @@ export const useTaskStore = defineStore('tasks', {
         Normal: pc.value === 'Normal',
         Low: pc.value === 'Low',
       }
-    },
+    }
   },
   actions: {
     entryDate() {
@@ -61,20 +33,49 @@ export const useTaskStore = defineStore('tasks', {
       this.sortedTasks = tempTaskArray
     },
     addTask() {
-      const newTaskObj = {
-        id: this.entryDate(),
-        title: this.inputText,
-        priority: this.pc,
-        dueDate: this.dateOutput,
-        complete: false
+      if (this.inputText.length > 0) {
+        const newTaskObj = {
+          id: this.entryDate(),
+          title: this.inputText,
+          priority: this.pc,
+          dueDate: this.dateOutput,
+          complete: false
+        }
+        this.tasks.push(newTaskObj)
+        this.inputText = ''
+        this.sortTasks()
+        this.focusAfterPriority()
       }
-      this.tasks.push(newTaskObj)
-      this.inputText = ''
-      this.sortTasks()
-      this.focusAfterPriority()
     },
     focusAfterPriority() {
       this.taskInput?.focus()
+    },
+    deleteTask(index) {
+      this.tasks.splice(index, 1)
+    },
+    orderTaskUp(index) {
+      const swapWith = index - 1
+
+      if (index >= 1 && index < this.tasks.length) {
+        const newTasks = [...this.tasks]
+        const temp = newTasks[index]
+        newTasks[index] = newTasks[swapWith]
+        newTasks[swapWith] = temp
+        this.tasks = newTasks
+        this.sortTasks()
+    }
+    },
+    orderTaskDown(index) {
+      const swapWith = index + 1
+
+      if (index < this.tasks.length - 1) {
+        const newTasks = [...this.tasks]
+        const temp = newTasks[index]
+        newTasks[index] = newTasks[swapWith]
+        newTasks[swapWith] = temp
+        this.tasks = newTasks
+        this.sortTasks()
+    }
     }
   }
 })

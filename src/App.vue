@@ -45,7 +45,7 @@ body {
 }
 
 textarea:focus, input:focus, input[type]:focus, .uneditable-input:focus {
-  outline-color: #4b82c0;
+  outline-color: #36726b;
 }
 
 @media (max-width: 768px) {

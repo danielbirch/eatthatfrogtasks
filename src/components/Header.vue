@@ -36,11 +36,13 @@ header {
   width: 90%;
   display: flex;
   position: sticky;
-  top: 1.5em;
-  margin: 0 auto 4em auto;
+  top: 2em;
+  margin: 0 auto 6em auto;
   background-color: #36726b;
   border-radius: 20px;
   z-index: 99;
+  overflow: hidden;
+  border: 3px solid transparent;
 }
 
 .logo-text {
@@ -52,17 +54,19 @@ header {
   display: flex;
   justify-content: flex-start;
   width: 70%;
-  padding: 20px 0;
+  padding: 20px 0 20px 40px;
 }
 
 .logo svg {
-  color: #73c4b7;
-  font-size: 47px;
+  color: #ededed;
+  font-size: 110px;
   float: left;
   line-height: 16em;
-  position: relative;
-  top: -1px;
-  padding-right: 10px;
+  position: absolute;
+  top: 0px;
+  padding-right: 0px;
+  rotate: -10deg;
+  left: -10px;
 }
 
 .logo-text div {
@@ -88,11 +92,12 @@ header {
 }
 
 .links a {
-  font-family: 'Gloria Hallelujah', cursive;
+  font-family: 'BlinkMacSystemFont', sans-serif;
   font-size: 18px;
   font-weight: 600;
   color: #fff;
-  padding: 26px;
+  padding: 16px 25px;
+  border-radius: 10px;
 }
 
 .is-active {

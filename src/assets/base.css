@@ -71,3 +71,31 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+
+/*
+  priority colours
+*/
+
+.task-priority.High, .High {
+  background-color: #E2435C;
+}
+
+.task-priority.Normal, .Normal {
+  background-color: #FDAB3D;
+}
+
+.task-priority.Low, .Low {
+  background-color: #73c4b7;
+}
+
+#High.task-item {
+  border-color: #E2435C;
+}
+
+#Normal.task-item {
+  border-color: #FDAB3D;
+}
+
+#Low.task-item {
+  border-color: #73c4b7;
+}

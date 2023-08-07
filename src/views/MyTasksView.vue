@@ -2,7 +2,6 @@
   <div class="wrapper-main">
     <div class="container">
       <div class="input-wrapper">
-
         <input
           placeholder="Add a new task..."
           class="task-input"
@@ -13,7 +12,7 @@
           ref="taskInput"
           autofocus
         />
-        <span @click.prevent="focusAfterPriority"></span>
+        <span @click.prevent="taskStore.addTask(); focusAfterPriority()"></span>
       </div>
       <PrioritySelect class="select-priority" @change="focusAfterPriority"/>
       <div class="select-date">
@@ -28,7 +27,14 @@
     </div>
   </div>
   <div class="wrapper-main">
-    <TaskItem v-for="task in taskStore.sortedTasks" :key="task.id" :task="task"/>
+    <TaskItem
+      v-for="(task, index) in taskStore.sortedTasks"
+      :key="task.id"
+      :task="task"
+      v-if="taskStore.tasks.length >= 1"
+      :index="index"
+    />
+    <div v-else class="no-tasks">Nice work! You're all caught up. 🎉</div>
   </div>
 </template>
 
@@ -49,6 +55,7 @@ import '@vuepic/vue-datepicker/dist/main.css'
 */
 
 const taskStore = useTaskStore()
+
 
 /*
   initial sort on load
@@ -122,8 +129,6 @@ function focusAfterPriority() {
   taskInput.value.focus()
 }
 
-// const focusAfterPriority = taskStore.focusAfterPriority
-
 
 </script>
 
@@ -137,8 +142,6 @@ function focusAfterPriority() {
 }
 
 .input-wrapper {
-  /* display:inline-block;
-  position: relative */
   display: flex;
   justify-content: flex-start;
   flex-grow: 10;
@@ -163,9 +166,6 @@ function focusAfterPriority() {
 }
 
 .task-input {
-  /* display: flex;
-  justify-content: flex-start;
-  flex-grow: 10; */
   width: 100%;
   border-radius: 10px;
   border: none;
@@ -174,7 +174,7 @@ function focusAfterPriority() {
   height: 60px;
   padding: 10px 15px;
   font-family: 'Arial', sans-serif;
-  color: #9b9b9b;
+  color: #686d6d;
 }
 
 input::placeholder {
@@ -186,7 +186,14 @@ input::placeholder {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  flex-grow: 1;
+}
+
+.select-date {
+  flex-basis: 20em;
+}
+
+.select-priority {
+  flex-basis: 8rem;
 }
 
 .dp__input {
@@ -194,5 +201,17 @@ input::placeholder {
   border: none;
   border-radius: 10px;
 }
+
+.no-tasks {
+  font-size: 24px;
+  font-weight: 600;
+  color: #c0c0c0;
+  text-align: center;
+}
+
+.dp__theme_light {
+  --dp-primary-color: #36726b;
+}
+
 
 </style>

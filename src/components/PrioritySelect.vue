@@ -50,16 +50,4 @@ select#priority {
   cursor: pointer;
 }
 
-.High {
-  background-color: #E2435C;
-}
-
-.Normal {
-  background-color: #FDAB3D;
-}
-
-.Low {
-  background-color: #4b82c0;
-}
-
 </style>
