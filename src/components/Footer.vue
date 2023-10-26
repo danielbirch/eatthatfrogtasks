@@ -5,7 +5,8 @@
         Copyright © {{ currentYear }} <a href="https://danielbirch.dev/" target="_blank">DanielBirch.dev</a>. All rights reserved.
       </div>
       <div class="footer-right">
-        <a href="#">Privacy</a>
+        <!-- <a href="#">Privacy</a> -->
+        <RouterLink to="/privacy">Privacy</RouterLink>
       </div>
     </div>
   </footer>
@@ -13,17 +14,26 @@
 
 <script setup>
 /*
+  Imports
+*/
+
+import { RouterLink } from 'vue-router'
+
+/*
   get current year
 */
 
 const currentYear = new Date().getFullYear()
-
 
 </script>
 
 <style scoped>
 footer {
   margin-bottom: 3em;
+  /* position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0; */
 }
 .wrapper {
   display: flex;

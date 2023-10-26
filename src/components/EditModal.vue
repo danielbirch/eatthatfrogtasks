@@ -22,7 +22,7 @@
           type="text"
           name="new-entry-input"
           @keydown.enter="taskStore.addTask"
-          v-model="taskStore.inputText"
+          v-model="taskStore.sortedTasks[index].title"
           ref="taskInput"
           autofocus
         />
@@ -32,6 +32,8 @@
     </div>
   </div>
 </template>
+
+<!-- Line 25 above, how to get index working? That may be the final part. -->
 
 <script setup>
 /*

@@ -49,7 +49,7 @@ textarea:focus, input:focus, input[type]:focus, .uneditable-input:focus {
 }
 
 @media (max-width: 768px) {
-  .wrapper-main {
+  main {
     margin: 0 1em;
   }
 }

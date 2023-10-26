@@ -21,7 +21,7 @@
 
       <div class="task-due-date">{{ task.dueDate }}</div>
       <div class="delete-task" @click.stop="taskStore.deleteTask(index)"></div>
-      <div class="edit-task" @click.stop="taskStore.toggleEditModal"></div>
+      <div class="edit-task" @click.stop="taskStore.toggleEditModal(index)"></div>
     </div>
 </template>
 

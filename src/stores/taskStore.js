@@ -4,7 +4,7 @@ import { defineStore } from 'pinia'
 export const useTaskStore = defineStore('tasks', {
   state: () => {
     return {
-      auth: ref(true),
+      auth: ref(false),
       inputText: ref(''),
       pc: ref('Normal'),
       priorityColor: ref(''),
@@ -78,8 +78,13 @@ export const useTaskStore = defineStore('tasks', {
         this.sortTasks()
     }
     },
-    toggleEditModal() {
+    toggleEditModal(index) {
       this.editModal = !this.editModal
+      console.log(this.sortedTasks[index].title)
+    },
+    forgotPassword(event) {
+      event.preventDefault()
+      alert('Link this to Firebase Auth')
     }
   }
 })
