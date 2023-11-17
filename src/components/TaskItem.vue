@@ -32,6 +32,7 @@
 
 import { ref, defineProps, onMounted } from 'vue'
 import { useTaskStore } from '@/stores/taskStore.js'
+import { doc, updateDoc } from "firebase/firestore"
 
 /*
   store
@@ -57,7 +58,7 @@ const hover = ref(null)
 
 const taskItem = ref(null)
 
-const markComplete = (taskId) => {
+const markComplete = async (taskId) => {
   taskItem.value.toggleAttribute('complete')
 
   const taskToComplete = taskStore.sortedTasks.find((task) => taskId === task.id)
@@ -65,11 +66,17 @@ const markComplete = (taskId) => {
     taskToComplete.complete = !taskToComplete.complete
     taskStore.sortTasks()
   }
+
+  console.log(taskId)
+
+  await updateDoc(doc(taskStore.tasksCollectionRef, taskId), {
+    complete: true
+  })
+  
 }
 
 /*
   set task priority colours
-  - consider moving this to Pinia later on
 */
 
 const taskPriority = ref(null)

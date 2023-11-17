@@ -74,7 +74,7 @@ form {
   width: 100%;
   border-radius: 10px;
   border: none;
-  font-size: 24px;
+  font-size: 20px;
   line-height: 1em;
   height: 60px;
   padding: 10px 15px;

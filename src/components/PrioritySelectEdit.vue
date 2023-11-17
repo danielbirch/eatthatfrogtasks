@@ -3,9 +3,8 @@
     <select
       name="priority"
       id="priority"
-      :class="taskStore.pc"
-      v-model="taskStore.pc"
-      @change="$emit('updatePriority')"
+      :class="taskStore.sortedTasks[taskStore.editModalIndex].priority"
+      v-model="taskStore.sortedTasks[taskStore.editModalIndex].priority"
     >
       <option value="High">High</option>
       <option value="Normal">Normal</option>

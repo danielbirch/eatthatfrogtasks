@@ -1,5 +1,9 @@
 import { ref } from 'vue'
 import { defineStore } from 'pinia'
+import { db } from '@/js/firebase.js'
+import { collection, onSnapshot, doc, setDoc, deleteDoc, addDoc, updateDoc } from "firebase/firestore"
+
+const tasksCollectionRef = collection(db, 'tasks')
 
 export const useTaskStore = defineStore('tasks', {
   state: () => {
@@ -11,7 +15,8 @@ export const useTaskStore = defineStore('tasks', {
       dateOutput: ref(''),
       tasks: [],
       sortedTasks: ref([]),
-      editModal: ref(false)
+      editModal: ref(false),
+      editModalIndex: ref(false),
     }
   },
   getters: {
@@ -24,6 +29,25 @@ export const useTaskStore = defineStore('tasks', {
     }
   },
   actions: {
+    async getTasks() {
+      const unsubscribe = onSnapshot(tasksCollectionRef, (querySnapshot) => {
+        const tasks = []
+        querySnapshot.forEach((doc) => {
+        let task = {
+          id: doc.id,
+          title: doc.data().title,
+          priority: doc.data().priority,
+          dueDate: doc.data().dueDate,
+          complete: doc.data().complete
+        }
+        tasks.push(task)
+        })
+        this.tasks = tasks
+        this.sortTasks()
+      })
+      // when I want to stop onSnapshot from listening (eg. nav to different page)
+      // unsubscribe()
+    },
     entryDate() {
       const taskEntryDate = new Date().getTime().toString()
       return taskEntryDate
@@ -33,26 +57,33 @@ export const useTaskStore = defineStore('tasks', {
       tempTaskArray.sort((a, b) => (a.complete === b.complete ? 0 : a.complete ? 1 : -1))
       this.sortedTasks = tempTaskArray
     },
-    addTask() {
+    async addTask() {
       if (this.inputText.length > 0) {
-        const newTaskObj = {
-          id: this.entryDate(),
+
+        await addDoc(tasksCollectionRef, {
           title: this.inputText,
           priority: this.pc,
           dueDate: this.dateOutput,
           complete: false
-        }
-        this.tasks.push(newTaskObj)
-        this.inputText = ''
-        this.sortTasks()
-        this.focusAfterPriority()
+        })
+
+        // await setDoc(doc(tasksCollectionRef, this.entryDate()), {
+        //   id: this.entryDate(),
+        //   title: this.inputText,
+        //   priority: this.pc,
+        //   dueDate: this.dateOutput,
+        //   complete: false
+        // })
       }
+      this.inputText = ''
+      this.sortTasks()
+      this.focusAfterPriority()
     },
     focusAfterPriority() {
       this.taskInput?.focus()
     },
-    deleteTask(index) {
-      this.tasks.splice(index, 1)
+    async deleteTask(index) {
+      await deleteDoc(doc(tasksCollectionRef, this.tasks[index].id))
     },
     orderTaskUp(index) {
       const swapWith = index - 1
@@ -80,11 +111,31 @@ export const useTaskStore = defineStore('tasks', {
     },
     toggleEditModal(index) {
       this.editModal = !this.editModal
+      this.editModalIndex = index
       console.log(this.sortedTasks[index].title)
+      console.log(this.sortedTasks[index].priority)
+      console.log(this.sortedTasks[index].dueDate)
     },
     forgotPassword(event) {
       event.preventDefault()
       alert('Link this to Firebase Auth')
-    }
+    },
+    testy() {
+      alert('v-model is working for the title, but not for priority. console log shows correct priority level, but v-model is bound to the other priority select field, instead of bound to the tasks priority data.')
+    },
+    // async markComplete(taskId) {
+    //   const test1 = this.taskItem.value.toggleAttribute('complete')
+    //   console.log(test1)
+
+    //   const taskToComplete = this.sortedTasks.find((task) => taskId === task.id)
+    //   if (taskToComplete) {
+    //     taskToComplete.complete = !taskToComplete.complete
+    //     this.sortTasks()
+    //   }
+    //   await updateDoc(tasksCollectionRef, {
+    //     complete: true
+    //   })
+    //   console.log('finish')
+    // }
   }
 })

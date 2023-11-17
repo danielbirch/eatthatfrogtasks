@@ -6,14 +6,17 @@
       <div class="edit-fields-1">
         <div class="edit-select-date">
           <VueDatePicker
-          v-model="taskStore.dateOutput"
           time-picker-inline
           :is-24="false"
           :enable-time-picker="false"
           :format="format"
+          v-model="taskStore.sortedTasks[taskStore.editModalIndex].dueDate"
           ></VueDatePicker>
         </div>
-        <PrioritySelect class="edit-select-priority" @change="focusAfterPriority"/>
+        <PrioritySelectEdit
+          class="edit-select-priority"
+          @update-priority="taskStore.testy"
+        />
       </div>
       <div class="edit-fields-2">
         <input
@@ -22,7 +25,7 @@
           type="text"
           name="new-entry-input"
           @keydown.enter="taskStore.addTask"
-          v-model="taskStore.sortedTasks[index].title"
+          v-model="taskStore.sortedTasks[taskStore.editModalIndex].title"
           ref="taskInput"
           autofocus
         />
@@ -33,7 +36,7 @@
   </div>
 </template>
 
-<!-- Line 25 above, how to get index working? That may be the final part. -->
+<!-- Don't need @update (emits) now as v-model is working for edit modal. Correct? -->
 
 <script setup>
 /*
@@ -42,7 +45,7 @@
 
 import { defineProps } from 'vue'
 import { useTaskStore } from '@/stores/taskStore.js'
-import PrioritySelect from '@/components/PrioritySelect.vue'
+import PrioritySelectEdit from '@/components/PrioritySelectEdit.vue'
 
 /*
   store
@@ -73,7 +76,7 @@ const props = defineProps(['format', 'date'])
   height: 100%;
   display: block;
   z-index: 9999;
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
 }
