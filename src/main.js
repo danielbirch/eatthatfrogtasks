@@ -1,6 +1,6 @@
 import './assets/main.css'
 
-import { createApp } from 'vue'
+import { createApp, markRaw } from 'vue'
 import { createPinia } from 'pinia'
 
 import App from './App.vue'
@@ -29,6 +29,16 @@ import VueDatePicker from '@vuepic/vue-datepicker';
 import '@vuepic/vue-datepicker/dist/main.css'
 
 app.component('VueDatePicker', VueDatePicker);
+
+/*
+  plugin to enable router in pinia
+*/
+
+// const pinia = createPinia()
+
+// pinia.use(({ store }) => {
+//   store.router = markRaw(router)
+// })
 
 
 app.use(createPinia())

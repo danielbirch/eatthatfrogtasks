@@ -15,23 +15,21 @@ import { onMounted } from 'vue'
 import { RouterView } from 'vue-router'
 import Header from '@/components/Header.vue'
 import Footer from '@/components/Footer.vue'
-import { useTaskStore } from '@/stores/taskStore.js'
+import { useAuthStore } from '@/stores/authStore.js'
 
 /*
   store
 */
 
-const taskStore = useTaskStore()
+const authStore = useAuthStore()
 
 /*
   mounted
 */
 
 onMounted(() => {
-    taskStore.getTasks()
+    authStore.init()
 })
-
-
 
 </script>
 

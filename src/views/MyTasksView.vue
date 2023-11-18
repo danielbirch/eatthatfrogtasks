@@ -51,20 +51,21 @@ import PrioritySelect from '@/components/PrioritySelect.vue'
 import VueDatePicker from '@vuepic/vue-datepicker';
 import '@vuepic/vue-datepicker/dist/main.css'
 import EditModal from '../components/EditModal.vue';
+import { useAuthStore } from '@/stores/authStore.js'
 
 /*
   store
 */
 
 const taskStore = useTaskStore()
-
+const authStore = useAuthStore()
 
 /*
-  initial sort on load
+  load tasks on load
 */
 
 onMounted(() => {
-  taskStore.sortTasks()
+  taskStore.getTasks()
 })
 
 /*

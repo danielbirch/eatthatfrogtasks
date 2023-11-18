@@ -1,40 +1,79 @@
 <template>
   <div class="primary-lr-container">
+
+    <div class="tabs">
+      <ul>
+        <li :class="{ 'is-active' : !register }"><a @click.prevent="register = false">Login</a></li>
+        <li :class="{ 'is-active' : register }"><a @click.prevent="register = true">Register</a></li>
+      </ul>
+    </div>
+
     <div class="login-container">
-      <h1>Login</h1>
-      <form>
-        <input placeholder="Email" class="email-input" type="text">
-        <input placeholder="Password" class="password-input" type="text">
-        <button type="submit" class="login" @click="taskStore.forgotPassword">Login</button>
+      <h1>{{ formTitle }}</h1>
+      <form @submit.prevent="onSubmit">
+        <input placeholder="Email" class="email-input" type="text" v-model="credentials.email">
+        <input placeholder="Password" class="password-input" type="password" v-model="credentials.password">
+        <button type="submit" class="login">{{ formTitle }}</button>
       </form>
       <a @click="taskStore.forgotPassword" class="forgot-password">Forgot your password?</a>
     </div>
 
-    <div class="vl"></div>
-  
-    <div class="register-container">
-      <h1>Register for Instant Access</h1>
-      <form>
-        <input placeholder="Email" class="email-input" type="text">
-        <input placeholder="Password" class="password-input" type="text">
-        <button type="submit" class="login" @click="taskStore.forgotPassword">Create Account</button>
-      </form>
-    </div>
   </div>
 </template>
 
 <script setup>
 /*
-  Imports
+  imports
 */
 
-import { useTaskStore } from '@/stores/taskStore.js'
+// import { useTaskStore } from '@/stores/taskStore.js'
+import { ref, computed, reactive } from 'vue'
+import { useAuthStore } from '@/stores/authStore.js'
 
 /*
   store
 */
 
-const taskStore = useTaskStore()
+const authStore = useAuthStore()
+
+/*
+  register / login
+*/
+
+const register = ref(false)
+
+const formTitle = computed(() => {
+  return register.value ? 'Register' : 'Login'
+})
+
+/*
+  credentials
+*/
+
+const credentials = reactive({
+  email: '',
+  password: ''
+})
+
+/*
+  submit
+*/
+
+const onSubmit = () => {
+  if (!credentials.email || !credentials.password) {
+    alert('Please enter your email and password to continue.')
+  }
+  else {
+    if (register.value) {
+      authStore.registerUser(credentials)
+      authStore.auth = true
+    }
+    else {
+      authStore.loginUser(credentials)
+      authStore.auth = true
+    }
+  }
+}
 
 </script>
 
@@ -42,9 +81,37 @@ const taskStore = useTaskStore()
 <style>
 .primary-lr-container {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   justify-content: center;
-  align-items: start;
+  align-items: center;
+}
+
+.tabs ul {
+  display: flex;
+  flex-direction: row;
+  gap: 1em;
+  padding-left: 0;
+  margin-top: 0;
+  margin-bottom: 20px;
+}
+
+.tabs li {
+  list-style: none;
+}
+
+.tabs li a {
+  padding: 0 10px;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.tabs li a:hover {
+  border-bottom: none;
+  cursor: pointer;
+}
+
+.tabs .is-active {
+  border-bottom: 2px solid #73c4b7;
 }
 
 .login-container, .register-container {
@@ -52,7 +119,6 @@ const taskStore = useTaskStore()
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  margin: 0 4em;
 }
 
 h1 {

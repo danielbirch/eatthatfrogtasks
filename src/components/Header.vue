@@ -10,9 +10,9 @@
         </div>
         <div class="links">
           <nav>
-            <RouterLink to="/" active-class="is-active" v-show="taskStore.auth">My Tasks</RouterLink>
-            <RouterLink to="#" v-show="taskStore.auth">Logout</RouterLink>
-            <RouterLink to="/login" active-class="is-active" v-show="!taskStore.auth">Login</RouterLink>
+            <RouterLink to="/" active-class="is-active" v-if="authStore.user.id">My Tasks</RouterLink>
+            <RouterLink to="#" @click="authStore.logoutUser" v-if="authStore.user.id">Logout</RouterLink>
+            <RouterLink to="/login" active-class="is-active" v-if="!authStore.user.id">Login</RouterLink>
           </nav>
         </div>
       </div>
@@ -26,8 +26,10 @@
 
 import { RouterLink } from 'vue-router'
 import { useTaskStore } from '@/stores/taskStore.js'
+import { useAuthStore } from '@/stores/authStore'
 
 const taskStore = useTaskStore()
+const authStore = useAuthStore()
 
 </script>
 
@@ -59,7 +61,7 @@ header .wrapper {
 .logo {
   display: flex;
   justify-content: flex-start;
-  width: 70%;
+  width: 50%;
   padding: 20px 0 20px 0;
   gap: 1em;
 }
@@ -93,7 +95,7 @@ header .wrapper {
   display: flex;
   justify-content: flex-end;
   align-items: center;
-  width: 30%;
+  width: 50%;
 }
 
 .links a {
