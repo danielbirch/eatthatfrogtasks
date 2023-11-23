@@ -2,8 +2,10 @@ import { ref } from 'vue'
 import { defineStore } from 'pinia'
 import { db } from '@/js/firebase.js'
 import { collection, onSnapshot, doc, setDoc, deleteDoc, addDoc, updateDoc } from "firebase/firestore"
+import { useAuthStore } from '@/stores/authStore'
 
-const tasksCollectionRef = collection(db, 'tasks')
+let tasksCollectionRef
+let unsubscribeSnapshot = null
 
 export const useTaskStore = defineStore('tasks', {
   state: () => {
@@ -29,8 +31,16 @@ export const useTaskStore = defineStore('tasks', {
     }
   },
   actions: {
+    init() {
+      const authStore = useAuthStore()
+      tasksCollectionRef = collection(db, 'users', authStore.user.id, 'tasks')
+      this.getTasks()
+    },
     async getTasks() {
-      const unsubscribe = onSnapshot(tasksCollectionRef, (querySnapshot) => {
+
+      // if(unsubscribeSnapshot) unsubscribeSnapshot() // unsub from listener if one is running before setting a new one
+      
+      unsubscribeSnapshot = onSnapshot(tasksCollectionRef, (querySnapshot) => {
         const tasks = []
         querySnapshot.forEach((doc) => {
         let task = {
@@ -44,9 +54,13 @@ export const useTaskStore = defineStore('tasks', {
         })
         this.tasks = tasks
         this.sortTasks()
+      }, (error) => {
+        console.log('Error Message: ', error.message)
       })
-      // when I want to stop onSnapshot from listening (eg. nav to different page)
-      // unsubscribe()
+    },
+    clearTasks() {
+      this.tasks = []
+      if(unsubscribeSnapshot) unsubscribeSnapshot() // unsub from listener on logout
     },
     entryDate() {
       const taskEntryDate = new Date().getTime().toString()
@@ -66,14 +80,6 @@ export const useTaskStore = defineStore('tasks', {
           dueDate: this.dateOutput,
           complete: false
         })
-
-        // await setDoc(doc(tasksCollectionRef, this.entryDate()), {
-        //   id: this.entryDate(),
-        //   title: this.inputText,
-        //   priority: this.pc,
-        //   dueDate: this.dateOutput,
-        //   complete: false
-        // })
       }
       this.inputText = ''
       this.sortTasks()

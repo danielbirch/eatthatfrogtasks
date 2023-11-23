@@ -1,4 +1,4 @@
-# Eat That Frog Tasks
+# Rocket Tasks
 
 A todo app that helps you complete your most important tasks first.
 

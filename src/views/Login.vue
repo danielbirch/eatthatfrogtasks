@@ -170,6 +170,7 @@ button.login:hover {
 .forgot-password {
   margin-top: 20px;
   cursor: pointer;
+  border-bottom: 2px solid transparent;
 }
 
 .vl {

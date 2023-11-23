@@ -3,6 +3,8 @@ import { auth } from '@/js/firebase'
 import { createUserWithEmailAndPassword, signOut, signInWithEmailAndPassword, onAuthStateChanged } from 'firebase/auth'
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
+import { useTaskStore } from '@/stores/taskStore'
+
 
 
 export const useAuthStore = defineStore('authStore', {
@@ -14,13 +16,17 @@ export const useAuthStore = defineStore('authStore', {
   actions: {
     init() {
       const router = useRouter()
+      const taskStore = useTaskStore()
+
       onAuthStateChanged(auth, (user) => {
         if (user) {
           this.user.id = user.uid
           this.user.email = user.email
           router.push('/')
+          taskStore.init()
         } else {
           this.user = {}
+          taskStore.clearTasks()
           router.replace('/login')
         }
       })

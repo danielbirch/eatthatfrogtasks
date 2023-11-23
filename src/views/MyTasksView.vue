@@ -44,7 +44,7 @@
   imports
 */
 
-import { onMounted, ref } from 'vue';
+import { ref } from 'vue';
 import { useTaskStore } from '@/stores/taskStore.js'
 import TaskItem from '@/components/TaskItem.vue'
 import PrioritySelect from '@/components/PrioritySelect.vue'
@@ -59,14 +59,6 @@ import { useAuthStore } from '@/stores/authStore.js'
 
 const taskStore = useTaskStore()
 const authStore = useAuthStore()
-
-/*
-  load tasks on load
-*/
-
-onMounted(() => {
-  taskStore.getTasks()
-})
 
 /*
   date format
