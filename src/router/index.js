@@ -25,7 +25,10 @@ const router = createRouter({
   ]
 })
 
-// navigation guards
+/*
+  navigation guards
+*/
+
 router.beforeEach(async (to, from) => {
   const authStore = useAuthStore()
   if (!authStore.user.id && to.name !== 'login') {

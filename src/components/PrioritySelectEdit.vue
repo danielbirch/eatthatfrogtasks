@@ -4,7 +4,8 @@
       name="priority"
       id="priority"
       :class="taskStore.sortedTasks[taskStore.editModalIndex].priority"
-      v-model="taskStore.sortedTasks[taskStore.editModalIndex].priority"
+      :value="taskStore.sortedTasks[taskStore.editModalIndex].priority"
+      @change="renderPC"
     >
       <option value="High">High</option>
       <option value="Normal">Normal</option>
@@ -15,18 +16,23 @@
 
 <script setup>
 /*
+  notes
+
+  - select > :value is correct, :class needs to be computed again with renderPC (in TaskItem.vue) in order to change colour
+
+*/
+
+/*
   imports
 */
 
-import { useTaskStore } from '@/stores/taskStore.js';
+import { useTaskStore } from '@/stores/taskStore.js'
 
 /*
   store
 */
 
 const taskStore = useTaskStore()
-
-
 
 
 </script>

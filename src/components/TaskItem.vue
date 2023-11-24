@@ -14,14 +14,15 @@
     <div class="task-text">{{ task.title }}</div>
       <div
         class="task-priority"
+        :class="task.priority"
         ref="taskPriority"
       >
         {{task.priority}}
       </div>
 
       <div class="task-due-date">{{ task.dueDate }}</div>
-      <div class="delete-task" @click.stop="taskStore.deleteTask(index)"></div>
       <div class="edit-task" @click.stop="taskStore.toggleEditModal(index)"></div>
+      <div class="delete-task" @click.stop="taskStore.deleteTask(index)"></div>
     </div>
 </template>
 
@@ -67,12 +68,9 @@ const markComplete = async (taskId) => {
     taskStore.sortTasks()
   }
 
-  console.log(taskId)
-
   await updateDoc(doc(taskStore.tasksCollectionRef, taskId), {
     complete: true
   })
-  
 }
 
 /*
@@ -148,10 +146,7 @@ onMounted(() => {
 
 .delete-task, .edit-task {
   flex-basis: 2em;
-}
-
-.edit-task {
-  margin-right: 1em;
+  margin-right: 0.8em;
 }
 
 .delete-task:after {

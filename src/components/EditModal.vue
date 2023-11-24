@@ -1,7 +1,7 @@
 <template>
   <div class="modal-overlay">
     <div class="wrapper-main" id="edit-modal">
-      <span class="close-modal" @click="taskStore.toggleEditModal"></span>
+      <span class="close-modal" @click="taskStore.toggleEditModal()"></span>
 
       <div class="edit-fields-1">
         <div class="edit-select-date">
@@ -15,7 +15,6 @@
         </div>
         <PrioritySelectEdit
           class="edit-select-priority"
-          @update-priority="taskStore.testy"
         />
       </div>
       <div class="edit-fields-2">
@@ -36,14 +35,16 @@
   </div>
 </template>
 
-<!-- Don't need @update (emits) now as v-model is working for edit modal. Correct? -->
-
 <script setup>
+/*
+  notes
+*/
+
 /*
   imports
 */
 
-import { defineProps } from 'vue'
+// import { defineProps } from 'vue'
 import { useTaskStore } from '@/stores/taskStore.js'
 import PrioritySelectEdit from '@/components/PrioritySelectEdit.vue'
 

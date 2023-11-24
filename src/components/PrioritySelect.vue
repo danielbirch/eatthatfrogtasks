@@ -5,7 +5,6 @@
       id="priority"
       :class="taskStore.pc"
       v-model="taskStore.pc"
-      @change="$emit('updatePriority')"
     >
       <option value="High">High</option>
       <option value="Normal">Normal</option>
@@ -15,6 +14,10 @@
 </template>
 
 <script setup>
+/*
+  notes
+*/
+
 /*
   imports
 */

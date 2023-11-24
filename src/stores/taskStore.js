@@ -4,7 +4,7 @@ import { db } from '@/js/firebase.js'
 import { collection, onSnapshot, doc, setDoc, deleteDoc, addDoc, updateDoc } from "firebase/firestore"
 import { useAuthStore } from '@/stores/authStore'
 
-let tasksCollectionRef
+// let tasksCollectionRef
 let unsubscribeSnapshot = null
 
 export const useTaskStore = defineStore('tasks', {
@@ -19,6 +19,7 @@ export const useTaskStore = defineStore('tasks', {
       sortedTasks: ref([]),
       editModal: ref(false),
       editModalIndex: ref(false),
+      tasksCollectionRef: null,
     }
   },
   getters: {
@@ -33,14 +34,15 @@ export const useTaskStore = defineStore('tasks', {
   actions: {
     init() {
       const authStore = useAuthStore()
-      tasksCollectionRef = collection(db, 'users', authStore.user.id, 'tasks')
+      this.tasksCollectionRef = collection(db, 'users', authStore.user.id, 'tasks')
+      console.log(this.tasksCollectionRef)
       this.getTasks()
     },
     async getTasks() {
 
       // if(unsubscribeSnapshot) unsubscribeSnapshot() // unsub from listener if one is running before setting a new one
       
-      unsubscribeSnapshot = onSnapshot(tasksCollectionRef, (querySnapshot) => {
+      unsubscribeSnapshot = onSnapshot(this.tasksCollectionRef, (querySnapshot) => {
         const tasks = []
         querySnapshot.forEach((doc) => {
         let task = {
@@ -50,7 +52,7 @@ export const useTaskStore = defineStore('tasks', {
           dueDate: doc.data().dueDate,
           complete: doc.data().complete
         }
-        tasks.push(task)
+          tasks.push(task)
         })
         this.tasks = tasks
         this.sortTasks()
@@ -74,7 +76,7 @@ export const useTaskStore = defineStore('tasks', {
     async addTask() {
       if (this.inputText.length > 0) {
 
-        await addDoc(tasksCollectionRef, {
+        await addDoc(this.tasksCollectionRef, {
           title: this.inputText,
           priority: this.pc,
           dueDate: this.dateOutput,
@@ -89,7 +91,7 @@ export const useTaskStore = defineStore('tasks', {
       this.taskInput?.focus()
     },
     async deleteTask(index) {
-      await deleteDoc(doc(tasksCollectionRef, this.tasks[index].id))
+      await deleteDoc(doc(this.tasksCollectionRef, this.tasks[index].id))
     },
     orderTaskUp(index) {
       const swapWith = index - 1
@@ -118,16 +120,10 @@ export const useTaskStore = defineStore('tasks', {
     toggleEditModal(index) {
       this.editModal = !this.editModal
       this.editModalIndex = index
-      console.log(this.sortedTasks[index].title)
-      console.log(this.sortedTasks[index].priority)
-      console.log(this.sortedTasks[index].dueDate)
     },
     forgotPassword(event) {
       event.preventDefault()
       alert('Link this to Firebase Auth')
-    },
-    testy() {
-      alert('v-model is working for the title, but not for priority. console log shows correct priority level, but v-model is bound to the other priority select field, instead of bound to the tasks priority data.')
     },
     // async markComplete(taskId) {
     //   const test1 = this.taskItem.value.toggleAttribute('complete')
