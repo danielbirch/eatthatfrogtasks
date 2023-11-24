@@ -1,8 +1,8 @@
 # Rocket Tasks
 
-A todo app that helps you complete your most important tasks first.
+A to do app that helps you complete your most important tasks first.
 
-## Developent Checklist
+## Development Checklist
 
 - [ ] Make app responsive and mobile friendly
 - [ ] Consolidate all Firebase code into /js/ with three separate files:
