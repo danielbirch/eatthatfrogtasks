@@ -1,5 +1,5 @@
-import { ref } from 'vue'
 import { defineStore } from 'pinia'
+import { ref } from 'vue'
 import { db } from '@/js/firebase.js'
 import { collection, onSnapshot, doc, setDoc, deleteDoc, addDoc, updateDoc } from "firebase/firestore"
 import { useAuthStore } from '@/stores/authStore'
@@ -38,6 +38,22 @@ export const useTaskStore = defineStore('tasks', {
       console.log(this.tasksCollectionRef)
       this.getTasks()
     },
+    entryDate() {
+      const taskEntryDate = new Date().getTime().toString()
+      return taskEntryDate
+    },
+    clearTasks() {
+      this.tasks = []
+      if(unsubscribeSnapshot) unsubscribeSnapshot() // unsub from listener on logout
+    },
+    sortTasks() {
+      const tempTaskArray = [...this.tasks]
+      tempTaskArray.sort((a, b) => (a.complete === b.complete ? 0 : a.complete ? 1 : -1))
+      this.sortedTasks = tempTaskArray
+    },
+    focusAfterPriority() {
+      this.taskInput?.focus()
+    },
     async getTasks() {
 
       // if(unsubscribeSnapshot) unsubscribeSnapshot() // unsub from listener if one is running before setting a new one
@@ -60,19 +76,6 @@ export const useTaskStore = defineStore('tasks', {
         console.log('Error Message: ', error.message)
       })
     },
-    clearTasks() {
-      this.tasks = []
-      if(unsubscribeSnapshot) unsubscribeSnapshot() // unsub from listener on logout
-    },
-    entryDate() {
-      const taskEntryDate = new Date().getTime().toString()
-      return taskEntryDate
-    },
-    sortTasks() {
-      const tempTaskArray = [...this.tasks]
-      tempTaskArray.sort((a, b) => (a.complete === b.complete ? 0 : a.complete ? 1 : -1))
-      this.sortedTasks = tempTaskArray
-    },
     async addTask() {
       if (this.inputText.length > 0) {
 
@@ -87,35 +90,45 @@ export const useTaskStore = defineStore('tasks', {
       this.sortTasks()
       this.focusAfterPriority()
     },
-    focusAfterPriority() {
-      this.taskInput?.focus()
+    async updateTask(taskIndex) {
+      console.log('update', taskIndex)
+      await updateDoc(tasksCollectionRef, {
+      })
     },
     async deleteTask(index) {
       await deleteDoc(doc(this.tasksCollectionRef, this.tasks[index].id))
     },
     orderTaskUp(index) {
-      const swapWith = index - 1
-
-      if (index >= 1 && index < this.tasks.length) {
-        const newTasks = [...this.tasks]
-        const temp = newTasks[index]
-        newTasks[index] = newTasks[swapWith]
-        newTasks[swapWith] = temp
-        this.tasks = newTasks
+      if (index > 0 && index < this.tasks.length) {
+        const newTasks = [...this.tasks];
+        // Swap the tasks
+        const temp = newTasks[index - 1];
+        newTasks[index - 1] = newTasks[index];
+        newTasks[index] = temp;
+        this.tasks = newTasks;
+        console.log('go up')
+        console.log(this.tasks)
+        // Sorting may not be necessary if your tasks are already sorted
         this.sortTasks()
-    }
+        this.updateTask()
+        // If you need to save to a database, do it here
+      }
     },
     orderTaskDown(index) {
-      const swapWith = index + 1
-
       if (index < this.tasks.length - 1) {
-        const newTasks = [...this.tasks]
-        const temp = newTasks[index]
-        newTasks[index] = newTasks[swapWith]
-        newTasks[swapWith] = temp
-        this.tasks = newTasks
+        const newTasks = [...this.tasks];
+        // Swap the tasks
+        const temp = newTasks[index + 1];
+        newTasks[index + 1] = newTasks[index];
+        newTasks[index] = temp;
+        this.tasks = newTasks;
+        console.log('go down')
+        console.log(this.tasks)
+        // Sorting may not be necessary if your tasks are already sorted
         this.sortTasks()
-    }
+        this.updateTask(index)
+        // If you need to save to a database, do it here
+      }
     },
     toggleEditModal(index) {
       this.editModal = !this.editModal

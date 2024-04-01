@@ -65,6 +65,7 @@ const authStore = useAuthStore()
 */
 
 const date = ref(new Date());
+console.log('Raw date format: ', date)
 
 const format = (date) => {
   const getDaySuffix = (dayOfWeek) => {
@@ -111,6 +112,7 @@ const format = (date) => {
   // const minutes = (date.getMinutes() <10?'0':'') + date.getMinutes()
 
   taskStore.dateOutput = `Due ${day}${dayOfWeek}${daySuffix}${month}`
+  console.log(taskStore.dateOutput) // need to use universal date format for this
   return taskStore.dateOutput
 }
 
